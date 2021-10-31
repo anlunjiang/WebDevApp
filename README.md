@@ -38,3 +38,11 @@ curl -X POST -H 'Content-Type: application/json' -d '{
 # Get results from server using exams endpoint
 curl http://localhost:5000/exams # can also browse to this in a web browser
 ```
+
+# Useful Links
+* https://auth0.com/blog/using-python-flask-and-angular-to-build-modern-apps-part-1/
+* https://auth0.com/blog/using-python-flask-and-angular-to-build-modern-web-apps-part-2/
+* https://auth0.com/blog/using-python-flask-and-angular-to-build-modern-web-apps-part-3/
+
+* https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
+* https://owasp.org/www-community/attacks/csrf
