@@ -39,10 +39,17 @@ curl -X POST -H 'Content-Type: application/json' -d '{
 curl http://localhost:5000/exams # can also browse to this in a web browser
 ```
 
+# CORS Cross Origin Resource Sharing
+
+Without any further configuration, flask-cors allows CORS for all domains on all routes
+
+
 # Useful Links
 * https://auth0.com/blog/using-python-flask-and-angular-to-build-modern-apps-part-1/
 * https://auth0.com/blog/using-python-flask-and-angular-to-build-modern-web-apps-part-2/
 * https://auth0.com/blog/using-python-flask-and-angular-to-build-modern-web-apps-part-3/
 
 * https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
+* https://flask-cors.readthedocs.io/en/latest/#resource-specific-cors
+
 * https://owasp.org/www-community/attacks/csrf
