@@ -1,5 +1,5 @@
 #!/bin/bash
-export FLASK_APP=./backend/run.py
+export FLASK_APP=./backend/run_app.py
 # shellcheck disable=SC1090
-source ~/.venvs/webdev/Scripts/activate
+source ~/.venvs/webapp/Scripts/activate
 flask run -h localhost
