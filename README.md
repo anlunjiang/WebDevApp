@@ -39,10 +39,30 @@ curl -X POST -H 'Content-Type: application/json' -d '{
 curl http://localhost:5000/exams # can also browse to this in a web browser
 ```
 
+# CORS Cross Origin Resource Sharing
+
+Without any further configuration, flask-cors allows CORS for all domains on all routes
+
+# Bootstrapping Angular Application
+
+Angular CLI installed a tool call `ng`
+
+* `ng new frontend` this will create the basic structure of the angular app in the folder 
+  * main.ts - entry point and will instantiate ./app/app.module
+  * app.module.ts - shows the ngmodule, the declarations, imports and providers. It will then run the bootstrap AppComponent
+  * app.component.ts - Component with html and css templates. on init and destroy it will run the functions 
+    * getExams - is triggered and conducts a GET request to the Flask backend
+  * app.component.html - html that will be run on browser - and display list of exams
+  * app.component.css - will show css code
+* `export NODE_OPTIONS=--openssl-legacy-provider` - before serve
+* `ng serve` - will compile and run the frontend server
+
 # Useful Links
 * https://auth0.com/blog/using-python-flask-and-angular-to-build-modern-apps-part-1/
 * https://auth0.com/blog/using-python-flask-and-angular-to-build-modern-web-apps-part-2/
 * https://auth0.com/blog/using-python-flask-and-angular-to-build-modern-web-apps-part-3/
 
 * https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
+* https://flask-cors.readthedocs.io/en/latest/#resource-specific-cors
+
 * https://owasp.org/www-community/attacks/csrf

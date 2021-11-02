@@ -1,6 +1,7 @@
 # coding=utf-8
 
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 
 from backend.schemas.internal import (
     Session,
@@ -12,10 +13,15 @@ from backend.schemas.internal import (
 
 # creating the Flask application
 app = Flask(__name__)
+CORS(app)
 
 # if needed, generate database schema
 Base.metadata.create_all(engine)
 
+
+@app.route("/")
+def home():
+    return "Hi"
 
 @app.route("/exams")
 def get_exams():
