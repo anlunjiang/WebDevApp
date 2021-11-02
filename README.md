@@ -47,6 +47,7 @@ Without any further configuration, flask-cors allows CORS for all domains on all
 
 Angular CLI installed a tool call `ng`
 * `ng new frontend` this will create the basic structure of the angular app in the folder 
+* 
 # Useful Links
 * https://auth0.com/blog/using-python-flask-and-angular-to-build-modern-apps-part-1/
 * https://auth0.com/blog/using-python-flask-and-angular-to-build-modern-web-apps-part-2/
