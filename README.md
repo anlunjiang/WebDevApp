@@ -57,6 +57,38 @@ Angular CLI installed a tool call `ng`
 * `export NODE_OPTIONS=--openssl-legacy-provider` - before serve
 * `ng serve` - will compile and run the frontend server
 
+# Managing using Auth0
+Provides a reliable service for authorising users - and integrates with social media 
+providors (facebook, google etc) as well a multifactor authorisation
+
+Note that once you secure an endpoint you wont be able to curl that endpoint unless you add some auth headers
+
+```bash
+$ curl -X POST -H 'Content-Type: application/json' -d '{
+>   "title": "TypeScript Advanced Exam",
+>   "description": "Tricky questions about TypeScript."
+> }' http://localhost:5000/exams
+{"code":"authorization_header_missing","description":"Authorization header is expected."}
+```
+
+You now need an API key to test the secured endpoint - go to your auth0 api page and run the curl command to get your
+access token. The cliend id and secret are the ones from the test application for your api
+
+```bash
+curl --request POST \
+  --url https://dev-uwupyck2.us.auth0.com/oauth/token \
+  --header 'content-type: application/json' \
+  --data '{"client_id":"","client_secret":"","audience":"","grant_type":"client_credentials"}'
+  
+JWT=""  
+  
+curl -X POST -H 'Content-Type: application/json' -H 'Authorization: Bearer '$JWT -d '{
+  "title": "TypeScript Advanced Exam",
+  "description": "Tricky questions about TypeScript."
+}' http://localhost:5000/exams
+
+```
+
 # Useful Links
 * https://auth0.com/blog/using-python-flask-and-angular-to-build-modern-apps-part-1/
 * https://auth0.com/blog/using-python-flask-and-angular-to-build-modern-web-apps-part-2/

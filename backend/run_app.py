@@ -11,6 +11,8 @@ from backend.schemas.internal import (
     ExamSchema,
 )
 
+from backend.auth import AuthError, requires_auth
+
 # creating the Flask application
 app = Flask(__name__)
 CORS(app)
@@ -22,6 +24,7 @@ Base.metadata.create_all(engine)
 @app.route("/")
 def home():
     return "Hi"
+
 
 @app.route("/exams")
 def get_exams():
@@ -39,6 +42,7 @@ def get_exams():
 
 
 @app.route("/exams", methods=["POST"])
+@requires_auth
 def add_exam():
     # mount exam object
     posted_exam = ExamSchema(only=("title", "description")).load(request.get_json())
@@ -54,3 +58,10 @@ def add_exam():
     new_exam = ExamSchema().dump(exam)
     session.close()
     return jsonify(new_exam), 201
+
+
+@app.errorhandler(AuthError)
+def handle_auth_error(err):
+    response = jsonify(err.error)
+    response.status_code = err.status_code
+    return response
