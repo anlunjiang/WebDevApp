@@ -3,7 +3,6 @@ import {Subscription} from 'rxjs';
 import {ExamsApiService} from './exams-api.service';
 import {Exam} from './exam.model';
 
-import * as Auth0 from 'auth0-web';
 
 
 @Component({
@@ -11,16 +10,12 @@ import * as Auth0 from 'auth0-web';
     templateUrl: './exams.component.html',
 })
 export class ExamsComponent implements OnInit, OnDestroy {
-    examsListSubs: Subscription;
-    examsList: Exam[];
+    examsListSubs: Subscription | undefined;
+    examsList: Exam[] | undefined;
     authenticated = false;
 
     constructor(private examsApi: ExamsApiService) {
     }
-
-    signIn = Auth0.signIn;
-    signOut = Auth0.signOut;
-    getProfile = Auth0.getProfile;
 
     ngOnInit() {
         this.examsListSubs = this.examsApi
@@ -30,11 +25,10 @@ export class ExamsComponent implements OnInit, OnDestroy {
                 },
                 console.error
             );
-        const self = this;
-        Auth0.subscribe((authenticated) => (self.authenticated = authenticated));
     }
 
     ngOnDestroy() {
+        // @ts-ignore
         this.examsListSubs.unsubscribe();
     }
 }

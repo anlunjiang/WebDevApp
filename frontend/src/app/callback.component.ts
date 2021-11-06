@@ -1,21 +1,23 @@
-import * as Auth0 from "auth0-web";
+import {AuthService} from "@auth0/auth0-angular";
 import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 
 @Component({
-  selector: 'callback',
-  template: `
-    <div>Loading authentication details...</div>
-  `,
+    selector: 'callback',
+    template: `
+        <div>Loading authentication details...</div>
+    `,
 })
 export class CallbackComponent implements OnInit {
-  constructor(private router: Router) { }
+    authService = AuthService;
 
-  ngOnInit(): void {
-    const self = this;
-    Auth0.handleAuthCallback((err) => {
-      if (err) alert(err);
-      self.router.navigate(['/']);
-    });
-  }
-}
+    constructor(private router: Router) {
+    }
+
+
+    ngOnInit(): void {
+        this.authService.subscribe(err => {
+            if (err) alert(err);
+            self.router.navigate(['/']);
+        }
+    }

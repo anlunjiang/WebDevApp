@@ -10,8 +10,8 @@ import {Exam} from './exams/exam.model';
 })
 export class AppComponent implements OnInit, OnDestroy {
   title = 'app';
-  examsListSubs: Subscription;
-  examsList: Exam[];
+  examsListSubs: Subscription | undefined;
+  examsList: Exam[] | undefined;
 
   constructor(private examsApi: ExamsApiService) {
   }
@@ -27,6 +27,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.examsListSubs.unsubscribe();
+    // @ts-ignore
+      this.examsListSubs.unsubscribe();
   }
 }
