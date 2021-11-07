@@ -35,7 +35,6 @@ export class ExamsApiService {
         }).subscribe(bearer => {
             this.bearer = bearer
         })
-        console.log(this.bearer)
         const httpOptions = {
             headers: new HttpHeaders({
                 'Authorization': `Bearer ${this.bearer}`
