@@ -98,3 +98,4 @@ curl -X POST -H 'Content-Type: application/json' -H 'Authorization: Bearer '$JWT
 * https://flask-cors.readthedocs.io/en/latest/#resource-specific-cors
 
 * https://owasp.org/www-community/attacks/csrf
+* https://www.npmjs.com/package/@auth0/auth0-angular#call-an-api

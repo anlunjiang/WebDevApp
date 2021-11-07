@@ -1,8 +1,9 @@
 <div>
     <button routerLink="/new-exam">New Exam</button>
-    <button (click)="signIn()" *ngIf="!authenticated">Sign In</button>
-    <button (click)="signOut()" *ngIf="authenticated">Sign Out</button>
-    <p *ngIf="authenticated">Hello, {{getProfile().name}}</p>
+    <button (click)="loginWithRedirect()" *ngIf="!authenticated">Sign In</button>
+    <button (click)="logout()" *ngIf="authenticated">Sign Out</button>
+    <p *ngIf="auth.user$">Hello, {{user}}</p>
+    <pre>{{authenticated}}</pre>
     <ul>
         <li *ngFor="let exam of examsList">
             {{exam.title}}

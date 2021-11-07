@@ -12,13 +12,13 @@ import {ExamsComponent} from './exams/exams.component';
 
 import {AuthModule, AuthHttpInterceptor, HttpMethod} from '@auth0/auth0-angular';
 
+import {API_URL} from "./env";
 
-import {CallbackComponent} from './callback.component';
+
 
 const appRoutes: Routes = [
     {path: 'new-exam', component: ExamFormComponent},
     {path: '', component: ExamsComponent},
-    {path: 'callback', component: CallbackComponent},
 ];
 
 @NgModule({
@@ -26,7 +26,6 @@ const appRoutes: Routes = [
         AppComponent,
         ExamFormComponent,
         ExamsComponent,
-        CallbackComponent,
     ],
     imports: [
         BrowserModule,
@@ -34,25 +33,8 @@ const appRoutes: Routes = [
         HttpClientModule,
         RouterModule.forRoot(appRoutes),
         AuthModule.forRoot({
-            domain: "https://dev-uwupyck2.us.auth0.com/",
-            clientId: 'DVsajTPprA8xTLZo5Ohx78cVVTOt6EZP',
-            redirectUri: 'http://localhost:4200/callback',
-            httpInterceptor: {
-                allowedList: [
-                    // Attach access tokens to any calls to '/api' (exact match)
-                    '/exams',
-
-                    // Matching on HTTP method
-                    {
-                        uri: '/exams',
-                        httpMethod: HttpMethod.Post,
-                        tokenOptions: {
-                            audience: "aj2814-test01",
-                            scope: 'openid profile manage:exams',
-                        },
-                    },
-                ],
-            },
+            domain: "dev-uwupyck2.us.auth0.com",
+            clientId: "DVsajTPprA8xTLZo5Ohx78cVVTOt6EZP",
         })
     ],
     providers: [
