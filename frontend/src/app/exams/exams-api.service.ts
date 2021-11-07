@@ -6,13 +6,14 @@ import {Observable} from "rxjs";
 import {catchError} from "rxjs/operators";
 import {API_URL} from "../env";
 import {Exam} from './exam.model';
-
-import * as Auth0 from 'auth0-web';
+import {AuthService} from "@auth0/auth0-angular";
 
 @Injectable()
 export class ExamsApiService {
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, private auth: AuthService) {
     }
+
+    bearer: string = "";
 
     private static _handleError(err: HttpErrorResponse | any) {
         return Observable.throw(err.message || "Error: Unable to complete request");
@@ -28,9 +29,16 @@ export class ExamsApiService {
     }
 
     saveExam(exam: Exam): Observable<any> {
+        this.auth.getAccessTokenWithPopup({
+            "audience": "aj2814-test01",
+            "scope": "manage:exams"
+        }).subscribe(bearer => {
+            this.bearer = bearer
+        })
+        console.log(this.bearer)
         const httpOptions = {
             headers: new HttpHeaders({
-                'Authorization': `Bearer ${Auth0.getAccessToken()}`
+                'Authorization': `Bearer ${this.bearer}`
             })
         };
         return this.http.post(`${API_URL}/exams`, exam, httpOptions);

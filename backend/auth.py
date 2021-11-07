@@ -56,6 +56,7 @@ def get_token_auth_header():
         )
 
     token = parts[1]
+    print(parts)
     return token
 
 
@@ -65,9 +66,11 @@ def requires_auth(method):
     @wraps(method)
     def decorater(*args, **kwargs):
         token = get_token_auth_header()
+        print(f"\n\ntoken: {token}")
         jsonurl = urlopen(f"https://{AUTH0_DOMAIN}/.well-known/jwks.json")
         jwks = json.loads(jsonurl.read())
         unverified_header = jwt.get_unverified_header(token)
+        print(f"unverified header: {unverified_header}")
         rsa_key = {}
         for key in jwks["keys"]:
             if key["kid"] == unverified_header["kid"]:
@@ -79,6 +82,8 @@ def requires_auth(method):
                     "e": key["e"],
                 }
         if rsa_key:
+            # print(rsa_key)
+            # print(token)
             try:
                 payload = jwt.decode(
                     token,
@@ -87,7 +92,7 @@ def requires_auth(method):
                     audience=API_AUDIENCE,
                     issuer="https://" + AUTH0_DOMAIN + "/",
                 )
-
+                print(payload)
             except jwt.ExpiredSignatureError:
                 raise AuthError(
                     {"code": "token_expired", "description": "Token expired."}, 401
@@ -101,18 +106,19 @@ def requires_auth(method):
                     },
                     401,
                 )
-            except Exception:
+            except Exception as e:
                 raise AuthError(
                     {
                         "code": "invalid_header",
                         "description": "Unable to parse authentication token.",
+                        "error": e
                     },
                     400,
                 )
 
             _request_ctx_stack.top.current_user = payload
             return method(*args, **kwargs)
-
+        print("NOPE")
         raise AuthError(
             {
                 "code": "invalid_header",

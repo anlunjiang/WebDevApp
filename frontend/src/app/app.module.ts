@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
-import {HttpClientModule} from "@angular/common/http";
+import {HttpClientModule, HTTP_INTERCEPTORS} from "@angular/common/http";
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
@@ -10,15 +10,15 @@ import {ExamFormComponent} from './exams/exam-form.component';
 import {RouterModule, Routes} from '@angular/router';
 import {ExamsComponent} from './exams/exams.component';
 
-import * as Auth0 from 'auth0-web';
-import { AuthModule } from '@auth0/auth0-angular';
+import {AuthModule, AuthHttpInterceptor, HttpMethod} from '@auth0/auth0-angular';
 
-import {CallbackComponent} from './callback.component';
+import {API_URL} from "./env";
+
+
 
 const appRoutes: Routes = [
     {path: 'new-exam', component: ExamFormComponent},
     {path: '', component: ExamsComponent},
-    {path: 'callback', component: CallbackComponent},
 ];
 
 @NgModule({
@@ -26,25 +26,23 @@ const appRoutes: Routes = [
         AppComponent,
         ExamFormComponent,
         ExamsComponent,
-        CallbackComponent,
     ],
     imports: [
         BrowserModule,
         AppRoutingModule,
         HttpClientModule,
-        RouterModule.forRoot(appRoutes)
+        RouterModule.forRoot(appRoutes),
+        AuthModule.forRoot({
+            domain: "dev-uwupyck2.us.auth0.com",
+            clientId: "DVsajTPprA8xTLZo5Ohx78cVVTOt6EZP",
+        })
     ],
-    providers: [ExamsApiService],
+    providers: [
+        ExamsApiService,
+        {provide: HTTP_INTERCEPTORS, useClass: AuthHttpInterceptor, multi: true},
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule {
-    constructor() {
-        Auth0.configure({
-            domain: 'https://dev-uwupyck2.us.auth0.com/',
-            audience: 'aj2814-test01',
-            clientID: 'DVsajTPprA8xTLZo5Ohx78cVVTOt6EZP',
-            redirectUri: 'http://localhost:4200/callback',
-            scope: 'openid profile manage:exams'
-        });
-    }
 }
+
