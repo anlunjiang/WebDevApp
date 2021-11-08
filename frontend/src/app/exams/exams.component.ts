@@ -7,6 +7,7 @@ import {AuthService} from "@auth0/auth0-angular";
 @Component({
     selector: 'exams',
     templateUrl: './exams.component.html',
+    styleUrls: ["./exams.component.css"],
 })
 export class ExamsComponent implements OnInit, OnDestroy {
     examsListSubs: Subscription | undefined;
