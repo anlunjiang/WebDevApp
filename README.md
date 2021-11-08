@@ -54,6 +54,7 @@ Angular CLI installed a tool call `ng`
     * getExams - is triggered and conducts a GET request to the Flask backend
   * app.component.html - html that will be run on browser - and display list of exams
   * app.component.css - will show css code
+* If you are cloning an existing project - you can install the node package requirements by running `npm install`
 * `export NODE_OPTIONS=--openssl-legacy-provider` - before serve
 * `ng serve` - will compile and run the frontend server
 
@@ -88,6 +89,91 @@ curl -X POST -H 'Content-Type: application/json' -H 'Authorization: Bearer '$JWT
 }' http://localhost:5000/exams
 
 ```
+
+# Securing Angular with Auth0
+* Install Auth0 with `npm install @auth0/auth0-angular`
+
+## Flow
+* Once Auth0 is setup with Flask and Angular:
+  * app.module.ts will initiate AuthModule with the application client id and domain
+  * http methods calling to backend e.g. POST /exams added httpoptions with the request
+    * method must retrieve access token - must be signed in other unauthorised
+    * retrieve access token must be declared with audience and scope to become JWT Signed and not encrypted
+    * retrieve access token silently can only be used in prod - localhost will not work - use retrieveAccessTokenWithPopup
+  * The authenticated method will have the bearer added as a header signed using RS256
+  * Python Flask backend method is authenticated with requires_auth decorator:
+    * It will retrieve the keys and decode the payload with the bearer from the angular frontend
+
+### Router Outlets
+Router Outlets act as dynamic placeholders that can add elements and components
+into a web page. 
+
+It will refer to the router list in the app.module.ts and load the components
+in order for components matching the route list
+
+# Angular Material 
+
+Used to enhance the look and feel of a SPA web application
+
+`npm i @angular/material@12.2.12 @angular/cdk@12.2.12 hammerjs`
+
+* index.html is then updated to add other dependencies - Roboto Font and Material 
+* style.css is also updated to import angular/material
+* main.ts updated to import hammerjs for gesture support
+
+# Authorisation through roles
+
+It is important to categorise users as admins and users - to enable certain 
+actions to be performed only say by admins
+
+This can be done in the rules section of the Auth0 dashboard with the following
+JS rule:
+
+```javascript
+// Set 'admin' role for anlunjiang@outlook.com and 'user' for everyone else
+// Save app_metadata to ID and access tokens
+function (user, context, callback) {
+
+    // Roles should only be set to verified users.
+    if (!user.email || !user.email_verified) {
+        return callback(null, user, context);
+    }
+
+    user.app_metadata = user.app_metadata || {};
+
+    var addRolesToUser = (user, cb) => {
+        if (user.email === 'anlunjiang@outlook.com') {
+            cb(null, ['admin']);
+        } else {
+            cb(null, ['user']);
+        }
+    };
+
+    addRolesToUser(user, (err, roles) => {
+        if (err) return callback(err);
+
+        user.app_metadata.roles = roles;
+        auth0.users.updateAppMetadata(user.user_id, user.app_metadata).then(() => {
+            const namespace = 'https://localhost/roles';
+            const userRoles = user.app_metadata.roles;
+            context.idToken[namespace] = userRoles;
+            context.accessToken[namespace] = userRoles;
+            callback(null, user, context);
+        }).catch(callback);
+    });
+}
+```
+
+# Alembic
+
+`alembic init migrations` initiates settings for alembic - one things to change
+is the url in alembic.ini - 
+
+* `sqlalchemy.url = postgresql://postgres:0NLIN3-ex4m@localhost:5432/online-exam`
+
+## Create a new revision
+
+`alembic revision -m "add long desc to exams"`
 
 # Useful Links
 * https://auth0.com/blog/using-python-flask-and-angular-to-build-modern-apps-part-1/

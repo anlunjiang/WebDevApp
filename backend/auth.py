@@ -56,7 +56,6 @@ def get_token_auth_header():
         )
 
     token = parts[1]
-    print(parts)
     return token
 
 
@@ -66,11 +65,9 @@ def requires_auth(method):
     @wraps(method)
     def decorater(*args, **kwargs):
         token = get_token_auth_header()
-        print(f"\n\ntoken: {token}")
         jsonurl = urlopen(f"https://{AUTH0_DOMAIN}/.well-known/jwks.json")
         jwks = json.loads(jsonurl.read())
         unverified_header = jwt.get_unverified_header(token)
-        print(f"unverified header: {unverified_header}")
         rsa_key = {}
         for key in jwks["keys"]:
             if key["kid"] == unverified_header["kid"]:
@@ -82,8 +79,6 @@ def requires_auth(method):
                     "e": key["e"],
                 }
         if rsa_key:
-            # print(rsa_key)
-            # print(token)
             try:
                 payload = jwt.decode(
                     token,
@@ -92,7 +87,6 @@ def requires_auth(method):
                     audience=API_AUDIENCE,
                     issuer="https://" + AUTH0_DOMAIN + "/",
                 )
-                print(payload)
             except jwt.ExpiredSignatureError:
                 raise AuthError(
                     {"code": "token_expired", "description": "Token expired."}, 401
@@ -118,7 +112,6 @@ def requires_auth(method):
 
             _request_ctx_stack.top.current_user = payload
             return method(*args, **kwargs)
-        print("NOPE")
         raise AuthError(
             {
                 "code": "invalid_header",
@@ -128,3 +121,25 @@ def requires_auth(method):
         )
 
     return decorater
+
+
+def requires_role(required_role):
+    def decorator(method):
+        def wrapper(*args, **kwargs):
+            token = get_token_auth_header()
+            unverified_claims = jwt.get_unverified_claims(token)
+            # search current token for the expected role
+            if unverified_claims.get('https://localhost/roles'):
+                roles = unverified_claims['https://localhost/roles']
+                for role in roles:
+                    if role == required_role:
+                        return method(*args, **kwargs)
+
+            raise AuthError({
+                'code': 'insuficient_roles',
+                'description': 'You do not have the roles needed to perform this operation.'
+            }, 401)
+
+        return wrapper
+
+    return decorator

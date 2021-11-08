@@ -11,7 +11,7 @@ from backend.schemas.internal import (
     ExamSchema,
 )
 
-from backend.auth import AuthError, requires_auth
+from backend.auth import AuthError, requires_auth, requires_role
 
 # creating the Flask application
 app = Flask(__name__)
@@ -44,8 +44,8 @@ def get_exams():
 @app.route("/exams", methods=["POST"])
 @requires_auth
 def add_exam():
-    # mount exam object
-    posted_exam = ExamSchema(only=("title", "description")).load(request.get_json())
+    # mount exam
+    posted_exam = ExamSchema(only=("title", "description", "long_description")).load(request.get_json())
     print(posted_exam)
     exam = Exam(**posted_exam, created_by="HTTP post request")
 
@@ -65,3 +65,14 @@ def handle_auth_error(err):
     response = jsonify(err.error)
     response.status_code = err.status_code
     return response
+
+
+@app.route("/exams/<examId>", methods=["DELETE"])
+@requires_role("admin")
+def delete_exam(examId):
+    session = Session()
+    exam = session.query(Exam).filter_by(id=examId).first()
+    session.delete(exam)
+    session.commit()
+    session.close()
+    return "", 201
