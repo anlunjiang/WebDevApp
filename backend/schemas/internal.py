@@ -34,6 +34,7 @@ class Exam(Entity, Base):
 
     title = Column(String)
     description = Column(String)
+    long_description = Column(String)
 
     def __init__(self, title, description, long_description, created_by):
         Entity.__init__(self, created_by)
@@ -46,7 +47,7 @@ class ExamSchema(Schema):
     id = fields.Number()
     title = fields.Str()
     description = fields.Str()
+    long_description = fields.Str()
     created_at = fields.DateTime()
     updated_at = fields.DateTime()
     last_updated_by = fields.Str()
-    long_description = fields.Str()

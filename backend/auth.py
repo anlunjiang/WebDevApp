@@ -56,7 +56,6 @@ def get_token_auth_header():
         )
 
     token = parts[1]
-    print(parts)
     return token
 
 
@@ -88,7 +87,6 @@ def requires_auth(method):
                     audience=API_AUDIENCE,
                     issuer="https://" + AUTH0_DOMAIN + "/",
                 )
-                print(payload)
             except jwt.ExpiredSignatureError:
                 raise AuthError(
                     {"code": "token_expired", "description": "Token expired."}, 401
@@ -114,7 +112,6 @@ def requires_auth(method):
 
             _request_ctx_stack.top.current_user = payload
             return method(*args, **kwargs)
-        print("NOPE")
         raise AuthError(
             {
                 "code": "invalid_header",
@@ -131,7 +128,6 @@ def requires_role(required_role):
         def wrapper(*args, **kwargs):
             token = get_token_auth_header()
             unverified_claims = jwt.get_unverified_claims(token)
-            print(unverified_claims)
             # search current token for the expected role
             if unverified_claims.get('https://localhost/roles'):
                 roles = unverified_claims['https://localhost/roles']

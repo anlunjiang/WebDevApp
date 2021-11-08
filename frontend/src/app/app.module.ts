@@ -17,6 +17,7 @@ import {AuthHttpInterceptor, AuthModule} from '@auth0/auth0-angular';
 import {MatButtonModule} from '@angular/material/button';
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatCardModule} from '@angular/material/card';
+import {MatInputModule} from "@angular/material/input";
 
 
 const appRoutes: Routes = [
@@ -41,6 +42,7 @@ const appRoutes: Routes = [
         MatToolbarModule,
         MatButtonModule,
         MatCardModule,
+        MatInputModule,
         NoopAnimationsModule,
         RouterModule.forRoot(appRoutes),
     ],

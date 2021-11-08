@@ -1,43 +1,42 @@
 import {Component} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
 import {ExamsApiService} from "./exams-api.service";
 import {Router} from "@angular/router";
 
 @Component({
-  selector: 'exam-form',
-  template: `
-    <div>
-      <h2>New Exam</h2>
-      <label for="exam-title">Title</label>
-      <input id="exam-title" (keyup)="updateTitle($event)">
-      <label for="exam-description">Description</label>
-      <input id="exam-description" (keyup)="updateDescription($event)">
-      <button (click)="saveExam()">Save Exam</button>
-    </div>
-  `
+    selector: 'exam-form',
+    templateUrl: './exam-form.component.html',
+    styleUrls: ["./exam-form.component.css"],
+
 })
 export class ExamFormComponent {
-  exam = {
-    title: '',
-    description: '',
-  };
+    exam = {
+        title: "",
+        description: "",
+        long_description: ""
+    };
 
-  constructor(private examsApi: ExamsApiService, private router: Router) { }
+    constructor(private examsApi: ExamsApiService, private router: Router) {
+    }
 
-  updateTitle(event: any) {
-    this.exam.title = event.target.value;
-  }
+    updateTitle(event: any) {
+        this.exam.title = event.target.value;
+    }
 
-  updateDescription(event: any) {
-    this.exam.description = event.target.value;
-  }
+    updateDescription(event: any) {
+        this.exam.description = event.target.value;
+    }
 
-  saveExam() {
-    this.examsApi
-      .saveExam(this.exam)
-      .subscribe(
-        () => this.router.navigate(['/']),
-        error => alert(error.message)
-      );
-  }
+    updateLongDescription(event: any) {
+        this.exam.long_description = event.target.value;
+    }
+
+
+    saveExam() {
+        this.examsApi
+            .saveExam(this.exam)
+            .subscribe(
+                () => this.router.navigate(['/']),
+                error => alert(error.message)
+            );
+    }
 }
