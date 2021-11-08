@@ -75,3 +75,4 @@ target/
 *.class
 /bin1/
 java/build/**
+/my-portfolio/node_modules/
