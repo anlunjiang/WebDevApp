@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {ExamsApiService} from "./exams-api.service";
+import {ExamsApiService} from "../exams-api.service";
 import {Router} from "@angular/router";
 
 @Component({

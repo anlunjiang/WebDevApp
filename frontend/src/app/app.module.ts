@@ -7,10 +7,10 @@ import {RouterModule, Routes} from '@angular/router';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {ExamsApiService} from "./exams/exams-api.service";
+import {ExamsApiService} from "./exams_components/exams-api.service";
 
-import {ExamFormComponent} from './exams/exam-form.component';
-import {ExamsComponent} from './exams/exams.component';
+import {ExamFormComponent} from './exams_components/exam-form/exam-form.component';
+import {ExamsComponent} from './exams_components/exams/exams.component';
 
 import {AuthHttpInterceptor, AuthModule} from '@auth0/auth0-angular';
 

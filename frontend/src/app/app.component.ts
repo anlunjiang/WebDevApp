@@ -1,7 +1,7 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {Subscription} from 'rxjs';
-import {ExamsApiService} from './exams/exams-api.service';
-import {Exam} from './exams/exam.model';
+import {ExamsApiService} from './exams_components/exams-api.service';
+import {Exam} from './exams_components/exam.model';
 
 import {AuthService} from "@auth0/auth0-angular";
 
