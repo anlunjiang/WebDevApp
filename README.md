@@ -121,6 +121,60 @@ Used to enhance the look and feel of a SPA web application
 * style.css is also updated to import angular/material
 * main.ts updated to import hammerjs for gesture support
 
+# Authorisation through roles
+
+It is important to categorise users as admins and users - to enable certain 
+actions to be performed only say by admins
+
+This can be done in the rules section of the Auth0 dashboard with the following
+JS rule:
+
+```javascript
+// Set 'admin' role for anlunjiang@outlook.com and 'user' for everyone else
+// Save app_metadata to ID and access tokens
+function (user, context, callback) {
+
+    // Roles should only be set to verified users.
+    if (!user.email || !user.email_verified) {
+        return callback(null, user, context);
+    }
+
+    user.app_metadata = user.app_metadata || {};
+
+    var addRolesToUser = (user, cb) => {
+        if (user.email === 'anlunjiang@outlook.com') {
+            cb(null, ['admin']);
+        } else {
+            cb(null, ['user']);
+        }
+    };
+
+    addRolesToUser(user, (err, roles) => {
+        if (err) return callback(err);
+
+        user.app_metadata.roles = roles;
+        auth0.users.updateAppMetadata(user.user_id, user.app_metadata).then(() => {
+            const namespace = 'https://localhost/roles';
+            const userRoles = user.app_metadata.roles;
+            context.idToken[namespace] = userRoles;
+            context.accessToken[namespace] = userRoles;
+            callback(null, user, context);
+        }).catch(callback);
+    });
+}
+```
+
+# Alembic
+
+`alembic init migrations` initiates settings for alembic - one things to change
+is the url in alembic.ini - 
+
+* `sqlalchemy.url = postgresql://postgres:0NLIN3-ex4m@localhost:5432/online-exam`
+
+## Create a new revision
+
+`alembic revision -m "add long desc to exams"`
+
 # Useful Links
 * https://auth0.com/blog/using-python-flask-and-angular-to-build-modern-apps-part-1/
 * https://auth0.com/blog/using-python-flask-and-angular-to-build-modern-web-apps-part-2/
