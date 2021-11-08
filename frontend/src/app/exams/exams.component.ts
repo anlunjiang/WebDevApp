@@ -1,9 +1,8 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs';
 import {ExamsApiService} from './exams-api.service';
 import {Exam} from './exam.model';
 import {AuthService} from "@auth0/auth0-angular";
-import {Observable} from "rxjs";
 
 @Component({
     selector: 'exams',
@@ -33,15 +32,5 @@ export class ExamsComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
         // @ts-ignore
         this.examsListSubs.unsubscribe();
-    }
-
-    loginWithRedirect(): void {
-        // Call this to redirect the user to the login page
-        this.auth.loginWithPopup();
-    }
-
-    logout(): void {
-        // Call this to log the user out of the application
-        this.auth.logout({returnTo: 'http://localhost:4200'});
     }
 }

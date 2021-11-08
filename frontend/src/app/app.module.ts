@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
-import {HttpClientModule, HTTP_INTERCEPTORS} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
@@ -10,10 +10,11 @@ import {ExamFormComponent} from './exams/exam-form.component';
 import {RouterModule, Routes} from '@angular/router';
 import {ExamsComponent} from './exams/exams.component';
 
-import {AuthModule, AuthHttpInterceptor, HttpMethod} from '@auth0/auth0-angular';
+import {AuthHttpInterceptor, AuthModule} from '@auth0/auth0-angular';
 
-import {API_URL} from "./env";
-
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {MatButtonModule} from '@angular/material/button';
+import {MatToolbarModule} from "@angular/material/toolbar";
 
 
 const appRoutes: Routes = [
@@ -35,7 +36,10 @@ const appRoutes: Routes = [
         AuthModule.forRoot({
             domain: "dev-uwupyck2.us.auth0.com",
             clientId: "DVsajTPprA8xTLZo5Ohx78cVVTOt6EZP",
-        })
+        }),
+        NoopAnimationsModule,
+        MatToolbarModule,
+        MatButtonModule,
     ],
     providers: [
         ExamsApiService,
