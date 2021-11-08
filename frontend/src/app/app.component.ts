@@ -30,7 +30,7 @@ export class AppComponent implements OnInit, OnDestroy {
                 console.error
             );
         this.auth.isAuthenticated$.subscribe(authed => this.authenticated = authed);
-        this.auth.user$.subscribe(user => this.user = JSON.stringify(user?.nickname, null, 2));
+        this.auth.user$.subscribe(user => this.user = JSON.stringify(user, null, 2));
     }
 
     ngOnDestroy() {

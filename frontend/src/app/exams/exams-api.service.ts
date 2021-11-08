@@ -42,5 +42,22 @@ export class ExamsApiService {
         };
         return this.http.post(`${API_URL}/exams`, exam, httpOptions);
     }
-}
 
+    deleteExam(examId: number) {
+
+        this.auth.getAccessTokenWithPopup({
+            "audience": "aj2814-test01",
+            "scope": "manage:exams"
+        }).subscribe(bearer => {
+            this.bearer = bearer
+        })
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Authorization': `Bearer ${this.bearer}`
+            })
+        };
+
+        return this.http
+            .delete(`${API_URL}/exams/${examId}`, httpOptions);
+    }
+}
